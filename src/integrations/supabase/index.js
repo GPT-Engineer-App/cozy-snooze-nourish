@@ -19,53 +19,109 @@ const fromSupabase = async (query) => {
 
 /* supabase integration types
 
-// EXAMPLE TYPES SECTION
-// DO NOT USE TYPESCRIPT
+### Events
 
-### foos
+| name       | type                        | format                    | required |
+|------------|-----------------------------|-----------------------|----------|
+| id         | uuid                        | string                | true     |
+| created_at | timestamp with time zone    | string                | true     |
+| type       | text                        | string                | true     |
+| start_time | timestamp without time zone | string                | true     |
+| end_time   | timestamp without time zone | string                | false    |
+| data       | json                        | object                | false    |
+| comment    | text                        | string                | false    |
+| kid        | uuid                        | string                | true     |
 
-| name    | type | format | required |
-|---------|------|--------|----------|
-| id      | int8 | number | true     |
-| title   | text | string | true     |
-| date    | date | string | true     |
+### Kids
 
-### bars
+| name       | type                     | format | required |
+|------------|--------------------------|--------|----------|
+| id         | uuid                     | string | true     |
+| created_at | timestamp with time zone | string | true     |
+| parent     | uuid                     | string | true     |
+| name       | text                     | string | false    |
+| image_url  | text                     | string | false    |
 
-| name    | type | format | required |
-|---------|------|--------|----------|
-| id      | int8 | number | true     |
-| foo_id  | int8 | number | true     |  // foreign key to foos
-	
 */
 
-// Example hook for models
+// Events hooks
+export const useEvents = () => useQuery({
+    queryKey: ['events'],
+    queryFn: () => fromSupabase(supabase.from('Events').select('*')),
+});
 
-export const useFoo = ()=> useQuery({
-    queryKey: ['foos'],
-    queryFn: fromSupabase(supabase.from('foos')),
-})
-export const useAddFoo = () => {
+export const useEvent = (id) => useQuery({
+    queryKey: ['events', id],
+    queryFn: () => fromSupabase(supabase.from('Events').select('*').eq('id', id).single()),
+});
+
+export const useAddEvent = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newFoo)=> fromSupabase(supabase.from('foos').insert([{ title: newFoo.title }])),
-        onSuccess: ()=> {
-            queryClient.invalidateQueries('foos');
+        mutationFn: (newEvent) => fromSupabase(supabase.from('Events').insert([newEvent])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('events');
         },
     });
 };
 
-export const useBar = ()=> useQuery({
-    queryKey: ['bars'],
-    queryFn: fromSupabase(supabase.from('bars')),
-})
-export const useAddBar = () => {
+export const useUpdateEvent = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newBar)=> fromSupabase(supabase.from('bars').insert([{ foo_id: newBar.foo_id }])),
-        onSuccess: ()=> {
-            queryClient.invalidateQueries('bars');
+        mutationFn: ({ id, ...updateData }) => fromSupabase(supabase.from('Events').update(updateData).eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('events');
         },
     });
 };
 
+export const useDeleteEvent = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id) => fromSupabase(supabase.from('Events').delete().eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('events');
+        },
+    });
+};
+
+// Kids hooks
+export const useKids = () => useQuery({
+    queryKey: ['kids'],
+    queryFn: () => fromSupabase(supabase.from('Kids').select('*')),
+});
+
+export const useKid = (id) => useQuery({
+    queryKey: ['kids', id],
+    queryFn: () => fromSupabase(supabase.from('Kids').select('*').eq('id', id).single()),
+});
+
+export const useAddKid = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (newKid) => fromSupabase(supabase.from('Kids').insert([newKid])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('kids');
+        },
+    });
+};
+
+export const useUpdateKid = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ id, ...updateData }) => fromSupabase(supabase.from('Kids').update(updateData).eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('kids');
+        },
+    });
+};
+
+export const useDeleteKid = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id) => fromSupabase(supabase.from('Kids').delete().eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('kids');
+        },
+    });
+};
