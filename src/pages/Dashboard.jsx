@@ -10,8 +10,8 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-green-500 flex items-center justify-center p-4">
-      <div className="w-full max-w-[800px] bg-white rounded-lg shadow-lg p-6">
+    <div className="h-screen bg-green-500 flex items-center justify-center p-4">
+      <div className="w-full max-w-[800px] bg-white rounded-lg shadow-lg p-6 overflow-y-auto max-h-[90vh]">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Baby Tracker Dashboard</h1>
           <Button onClick={handleSignOut}>Sign Out</Button>
