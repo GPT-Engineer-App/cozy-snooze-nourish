@@ -37,7 +37,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-white p-0">
       <Card className="w-[350px] bg-green-500 text-white">
         <CardHeader>
           <CardTitle className="text-white">Baby Tracker</CardTitle>
