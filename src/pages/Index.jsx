@@ -5,6 +5,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { supabase } from '@/lib/supabase'
+import { useNavigate } from 'react-router-dom'
+import { useKidsByParent } from '@/integrations/supabase'
 
 const Index = () => {
   const [email, setEmail] = useState('')
@@ -12,6 +14,8 @@ const Index = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [signUpSuccess, setSignUpSuccess] = useState(false)
+  const navigate = useNavigate()
+  const { refetch: refetchKids } = useKidsByParent()
 
   const handleSignUp = async (e) => {
     e.preventDefault()
@@ -31,8 +35,13 @@ const Index = () => {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) setError(error.message)
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      setError(error.message)
+    } else {
+      await refetchKids()
+      navigate('/dashboard')
+    }
     setLoading(false)
   }
 

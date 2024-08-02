@@ -91,6 +91,15 @@ export const useKids = () => useQuery({
     queryFn: () => fromSupabase(supabase.from('Kids').select('*')),
 });
 
+export const useKidsByParent = () => {
+    const { data: session } = supabase.auth.getSession();
+    return useQuery({
+        queryKey: ['kidsByParent'],
+        queryFn: () => fromSupabase(supabase.from('Kids').select('*').eq('parent', session?.user?.id)),
+        enabled: !!session?.user?.id,
+    });
+};
+
 export const useKid = (id) => useQuery({
     queryKey: ['kids', id],
     queryFn: () => fromSupabase(supabase.from('Kids').select('*').eq('id', id).single()),
