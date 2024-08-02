@@ -92,10 +92,30 @@ export const useKids = () => useQuery({
 });
 
 export const useKidsByParent = () => {
-    const { data: session } = supabase.auth.getSession();
+    const [session, setSession] = useState(null);
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+        });
+
+        const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+            setSession(session);
+        });
+
+        return () => {
+            authListener.subscription.unsubscribe();
+        };
+    }, []);
+
     return useQuery({
         queryKey: ['kidsByParent'],
-        queryFn: () => fromSupabase(supabase.from('Kids').select('*').eq('parent', session?.user?.id)),
+        queryFn: async () => {
+            if (!session?.user?.id) {
+                throw new Error('User not authenticated');
+            }
+            return fromSupabase(supabase.from('Kids').select('*').eq('parent', session.user.id));
+        },
         enabled: !!session?.user?.id,
     });
 };
