@@ -2,8 +2,13 @@ import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { supabase } from '@/lib/supabase'
 
 const Settings = () => {
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+  }
+
   return (
     <div className="bg-green-400 p-6 rounded-lg">
       <h2 className="text-2xl font-semibold mb-4 text-white">Settings</h2>
@@ -18,6 +23,9 @@ const Settings = () => {
         </div>
         <Button type="submit" className="bg-white text-green-500 hover:bg-green-100">Save Changes</Button>
       </form>
+      <div className="mt-6">
+        <Button onClick={handleSignOut} variant="destructive" className="w-full">Sign Out</Button>
+      </div>
     </div>
   )
 }
