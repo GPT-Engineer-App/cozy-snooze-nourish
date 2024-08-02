@@ -4,9 +4,11 @@ import FoodTracker from '@/components/FoodTracker'
 import Settings from '@/components/Settings'
 import { Button } from "@/components/ui/button"
 import { Settings as SettingsIcon } from 'lucide-react'
+import { useKidsData } from '@/integrations/supabase'
 
 const Dashboard = () => {
   const [showSettings, setShowSettings] = useState(false)
+  const { data: kidsData, isLoading, isError } = useKidsData()
 
   const toggleSettings = () => {
     setShowSettings(!showSettings)
@@ -32,6 +34,18 @@ const Dashboard = () => {
             <div className="bg-green-400 p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4 text-white">Food Tracker</h2>
               <FoodTracker />
+            </div>
+            <div className="bg-green-400 p-6 rounded-lg">
+              <h2 className="text-2xl font-semibold mb-4 text-white">Kids Data</h2>
+              {isLoading ? (
+                <p className="text-white">Loading...</p>
+              ) : isError ? (
+                <p className="text-red-300">Error fetching kids data</p>
+              ) : (
+                <pre className="text-white overflow-x-auto">
+                  {JSON.stringify(kidsData, null, 2)}
+                </pre>
+              )}
             </div>
           </div>
         )}

@@ -134,3 +134,8 @@ export const useDeleteKid = () => {
         },
     });
 };
+
+export const useKidsData = () => useQuery({
+    queryKey: ['kidsData'],
+    queryFn: () => fromSupabase(supabase.from('Kids').select('*')),
+});
