@@ -37,28 +37,28 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Card className="w-[350px]">
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <Card className="w-[350px] bg-green-500 text-white">
         <CardHeader>
-          <CardTitle>Baby Tracker</CardTitle>
-          <CardDescription>Sign in or create an account</CardDescription>
+          <CardTitle className="text-white">Baby Tracker</CardTitle>
+          <CardDescription className="text-green-100">Sign in or create an account</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
+                <Label htmlFor="email" className="text-white">Email</Label>
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" className="bg-green-400 text-white placeholder-green-200" />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
+                <Label htmlFor="password" className="text-white">Password</Label>
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" className="bg-green-400 text-white placeholder-green-200" />
               </div>
             </div>
           </form>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
           {signUpSuccess && (
-            <Alert className="mt-4">
+            <Alert className="mt-4 bg-green-400 text-white border-green-300">
               <AlertDescription>
                 Sign up successful! Please check your email for a confirmation link.
               </AlertDescription>
@@ -66,8 +66,8 @@ const Index = () => {
           )}
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline" onClick={handleSignUp} disabled={loading}>Sign Up</Button>
-          <Button onClick={handleSignIn} disabled={loading}>Sign In</Button>
+          <Button variant="outline" onClick={handleSignUp} disabled={loading} className="text-white border-white hover:bg-green-600">Sign Up</Button>
+          <Button onClick={handleSignIn} disabled={loading} className="bg-white text-green-500 hover:bg-green-100">Sign In</Button>
         </CardFooter>
       </Card>
     </div>
