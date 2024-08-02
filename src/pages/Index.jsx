@@ -22,9 +22,10 @@ const Index = () => {
     setLoading(true)
     setError(null)
     setSignUpSuccess(false)
-    const { error } = await supabase.auth.signUp({ email, password })
-    if (error) {
-      setError(error.message)
+    const response = await supabase.auth.signUp({ email, password })
+    console.log('Sign up response:', response)
+    if (response.error) {
+      setError(response.error.message)
     } else {
       setSignUpSuccess(true)
     }
